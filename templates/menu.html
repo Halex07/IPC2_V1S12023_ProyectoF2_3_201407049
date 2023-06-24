@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Menú</title>
+</head>
+<body>
+    {% if session['rol'] == 'administrador' %}
+        <h1>Menú del administrador</h1>
+        <ul>
+            <a href="{{ url_for('usuarios.gestionar_usuarios') }}">Gestionar usuarios</a>
+            <li><a href="/gestionar_peliculas">Gestionar películas</a></li>
+            <li><a href="/gestionar_salas">Gestionar salas</a></li>
+            <li><a href="/gestionar_boletos">Gestionar boletos</a></li>
+            <li><a href="/logout">Salir</a></li>
+        </ul>
+       
+    {% elif session['rol'] == 'cliente' %}
+        <h1>Menú del cliente</h1>
+        <ul>
+            <li><a href="/Peliculas">Peliculas</a></li>
+            <li><a href="/salas">Gestionar películas</a></li>
+            <li><a href="/comprar boletos">Gestionar salas</a></li>
+            <li><a href="/gestionar_boletos">Gestionar boletos</a></li>
+            <li><a href="/logout">Salir</a></li>
+        </ul>
+    {% else %}
+        <h1>Sesión inválida</h1>
+    {% endif %}
+</body>
+</html>
+
+
