@@ -2,17 +2,20 @@
 <html>
 <head>
     <title>Gestionar usuarios</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 </head>
 <body>
-    <h1>Gestionar usuarios</h1>
-    <ul>
-        <li><a href="{{ url_for('usuarios.agregar_usuario') }}">Agregar usuario</a></li>
-        <li><a href="/modificar_usuario">Modificar usuario</a></li>
-        <li><a href="/ver_lista_usuarios">Ver lista de usuarios</a></li>
-        <li><a href="/eliminar_usuario">Eliminar usuario</a></li>
-        <li><a href="/logout">Salir</a></li>
-    </ul>
-    
-   
+    <div class="container">
+        <h1 class="mt-4">Gestionar usuarios</h1>
+        <ul class="list-group">
+            <a href="{{ url_for('usuarios.agregar_usuario') }}" class="list-group-item">Agregar usuario</a>
+            <a href="/modificar_usuario" class="list-group-item">Modificar usuario</a>
+            <a href="/ver_lista_usuarios" class="list-group-item">Ver lista de usuarios</a>
+            <a href="/eliminar_usuario" class="list-group-item">Eliminar usuario</a>
+            <a href="/logout" class="list-group-item">Salir</a>
+        </ul>
+    </div>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 </body>
 </html>

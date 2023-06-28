@@ -2,31 +2,36 @@
 <html>
 <head>
     <title>Menú</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 </head>
 <body>
-    {% if session['rol'] == 'administrador' %}
-        <h1>Menú del administrador</h1>
-        <ul>
-            <a href="{{ url_for('usuarios.gestionar_usuarios') }}">Gestionar usuarios</a>
-            <li><a href="/gestionar_peliculas">Gestionar películas</a></li>
-            <li><a href="/gestionar_salas">Gestionar salas</a></li>
-            <li><a href="/gestionar_boletos">Gestionar boletos</a></li>
-            <li><a href="/logout">Salir</a></li>
-        </ul>
-       
-    {% elif session['rol'] == 'cliente' %}
-        <h1>Menú del cliente</h1>
-        <ul>
-            <li><a href="/Peliculas">Peliculas</a></li>
-            <li><a href="/salas">Gestionar películas</a></li>
-            <li><a href="/comprar boletos">Gestionar salas</a></li>
-            <li><a href="/gestionar_boletos">Gestionar boletos</a></li>
-            <li><a href="/logout">Salir</a></li>
-        </ul>
-    {% else %}
-        <h1>Sesión inválida</h1>
-    {% endif %}
+    <div class="container">
+        {% if session['rol'] == 'administrador' %}
+            <h1 class="mt-4">Menú del administrador</h1>
+            <ul class="list-group">
+                <a href="{{ url_for('usuarios.gestionar_usuarios') }}" class="list-group-item">Gestionar usuarios</a>
+                <a href="{{ url_for('cartelera.index') }}" class="list-group-item">Gestionar películas</a>
+                <a href="/gestionar_salas" class="list-group-item">Gestionar salas</a>
+                <a href="/gestionar_boletos" class="list-group-item">Gestionar boletos</a>
+                <a href="/logout" class="list-group-item">Salir</a>
+            </ul>
+        {% elif session['rol'] == 'cliente' %}
+            <h1 class="mt-4">Menú del cliente</h1>
+            <ul class="list-group">
+                <a href="{{ url_for('cartelera.mostrar_cartelera') }}" class="list-group-item">Películas</a>
+                <a href="/salas" class="list-group-item">Gestionar salas</a>
+                <a href="/comprar_boletos" class="list-group-item">Comprar boletos</a>
+                <a href="/gestionar_boletos" class="list-group-item">Gestionar boletos</a>
+                <a href="/logout" class="list-group-item">Salir</a>
+            </ul>
+        {% else %}
+            <h1 class="mt-4">Sesión inválida</h1>
+        {% endif %}
+    </div>
+    
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 </body>
 </html>
+
 
 

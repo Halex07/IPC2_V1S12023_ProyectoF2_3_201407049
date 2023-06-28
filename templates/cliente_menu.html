@@ -2,16 +2,22 @@
 <html>
 <head>
     <title>Menú de cliente</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 </head>
 <body>
-    <h1>Menú de cliente</h1>
-    <ul>
-        <li><a href="#">Ver listado de películas</a></li>
-        <li><a href="#">Marcar película como favorita</a></li>
-        <li><a href="#">Comprar boletos</a></li>
-        <li><a href="#">Mostrar historial de compras</a></li>
-        <li><a href="#">Salir</a></li>
-    </ul>
+    <div class="container">
+        <h1 class="mt-4">Menú de cliente</h1>
+        <ul class="list-group">
+            <li class="list-group-item"><a href="{{ url_for('cartelera.agregar_pelicula') }}">Ver listado de películas</a></li>
+            <li class="list-group-item"><a href="#">Marcar película como favorita</a></li>
+            <li class="list-group-item"><a href="#">Comprar boletos</a></li>
+            <li class="list-group-item"><a href="#">Mostrar historial de compras</a></li>
+            <li class="list-group-item"><a href="#">Salir</a></li>
+        </ul>
+    </div>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 </body>
 </html>
+
 

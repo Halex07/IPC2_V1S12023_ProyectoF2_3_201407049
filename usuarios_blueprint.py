@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, Blueprint, redirect, url_for
 from xml.etree import ElementTree as etree
-from lxml import etree
+from lxml import etree 
 
 
 app = Flask(__name__)
@@ -12,7 +12,7 @@ class Usuario:
         self.nombre = nombre
         self.apellido = apellido
         self.telefono = telefono
-        self.correo = correo
+        self.correo = correo 
         self.contrasena = contrasena
 
 # Clase para representar una lista enlazada de usuarios

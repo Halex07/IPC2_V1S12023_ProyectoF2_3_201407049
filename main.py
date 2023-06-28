@@ -1,11 +1,13 @@
 from flask import Flask, request, render_template, session, redirect, url_for
 import xml.etree.ElementTree as ET
 from usuarios_blueprint import usuarios_blueprint
+from inicio import cartelera_bp
 
 app = Flask(__name__)
 
 # Registrar el blueprint en la aplicación
 app.register_blueprint(usuarios_blueprint, url_prefix='/usuarios')
+app.register_blueprint(cartelera_bp, url_prefix='/cartelera')
 
 class Nodo:
     def __init__(self, dato=None):

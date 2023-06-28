@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inicio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Bienvenido a la cartelera de películas</h1>
+        <a class="btn btn-primary mt-3" href="{{ url_for('cartelera.mostrar_cartelera') }}">Ver Cartelera</a>
+        <a class="btn btn-success mt-3" href="{{ url_for('cartelera.agregar_pelicula') }}">Agregar Película</a>
+    </div>
+    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+</body>
+</html>
+
