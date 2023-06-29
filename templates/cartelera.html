@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cartelera</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Cartelera</h1>
+
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Categoria</th>
+                    <th>Titulo</th>
+                    <th>Director</th>
+                    <th>Año</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pelicula in peliculas %}
+                <tr>
+                    <td>{{ pelicula.cate }}</td>
+                    <td>{{ pelicula.titulo }}</td>
+                    <td>{{ pelicula.director }}</td>
+                    <td>{{ pelicula.anio }}</td>
+                    <td>{{ pelicula.fecha }}</td>
+                    <td>{{ pelicula.hora }}</td>
+                    <td>
+                        <a href="{{ url_for('cartelera.editar_pelicula', nombre_pelicula=pelicula.titulo) }}" class="btn btn-primary">Editar</a>
+                        <a href="{{ url_for('cartelera.eliminar_pelicula', nombre_pelicula=pelicula.titulo) }}" class="btn btn-danger">Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="d-flex justify-content-between">
+            <a href="{{ url_for('cartelera.agregar_pelicula') }}" class="btn btn-success btn-block text-center">Agregar Película</a>
+            <form action="{{ url_for('cartelera.agregar_pelicula') }}" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <input type="file" name="xml_file" accept=".xml" class="form-control-file" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Cargar XML</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+</body>
+</html>
