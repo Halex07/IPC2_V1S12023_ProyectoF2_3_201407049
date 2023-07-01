@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Historial de Compras</title>
+</head>
+<body>
+    <h1>Historial de Compras</h1>
+    <table>
+        <tr>
+            <th>Película</th>
+            <th>Cantidad</th>
+            <th>Fecha</th>
+        </tr>
+        {% for compra in peliculas %}
+        <tr>
+            <td>{{ compra.pelicula.titulo }}</td>
+            <td>{{ compra.cantidad }}</td>
+            <td>{{ compra.fecha }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

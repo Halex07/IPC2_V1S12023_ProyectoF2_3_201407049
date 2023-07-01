@@ -6,9 +6,6 @@ from werkzeug.utils import secure_filename
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired
 from listas import *
-from flask import jsonify
-from listfav import *
-
 app = Flask(__name__)
 cartelera_bp = Blueprint('cartelera', __name__)
 
@@ -59,7 +56,7 @@ class Cartelera:
                 return True
             actual = actual.siguiente
         return False
-    
+
 
     def eliminar_pelicula(self, nombre_pelicula):
         if self.primer_pelicula.titulo == nombre_pelicula:
@@ -72,60 +69,28 @@ class Cartelera:
                 return True
             actual = actual.siguiente
         return False
+
+
 cartelera = Cartelera()
 
-class ListaCategorias:
-    def __init__(self):
-        self.primera_categoria = None
-
-    def agregar_categoria(self, cate):
-        if self.primera_categoria is None:
-            self.primera_categoria = cate
-        else:
-            actual = self.primera_categoria
-            while actual.siguiente_categoria is not None:
-                actual = actual.siguiente_categoria
-            actual.siguiente_categoria = cate
-
-    def buscar_pelicula_por_nombre(self, nombre_pelicula):
-        actual_categoria = self.primera_categoria
-        while actual_categoria is not None:
-            actual_pelicula = actual_categoria.primera_pelicula
-            while actual_pelicula is not None:
-                if actual_pelicula.titulo.lower() == nombre_pelicula.lower():
-                    return actual_categoria, actual_pelicula
-                actual_pelicula = actual_pelicula.siguiente
-            actual_categoria = actual_categoria.siguiente_categoria
-
-        # Si no se encontró la película, retornar None
-        return None, None
 
 
+root = ET.parse('peliculas.xml')
 
-def cargar_datos_cartelera():
-    global cartelera
+# Recorrer el XML y agregar las películas a la cartelera
+for categoria in root.findall('categoria'):
+    cate = categoria.find('nombre').text
+    peliculas = categoria.find('peliculas')
+    for pelicula in peliculas.findall('pelicula'):
+        titulo = pelicula.find('titulo').text
+        director = pelicula.find('director').text
+        anio = pelicula.find('anio').text
+        fecha = pelicula.find('fecha').text
+        hora = pelicula.find('hora').text
 
-    # Limpiar la lista cartelera antes de cargar los datos del archivo XML
-    #cartelera = Cartelera()
-
-    # Cargar el archivo XML
-    root = ET.parse('peliculas.xml')
-
-    # Recorrer el XML y agregar las películas a la cartelera
-    for categoria in root.findall('categoria'):
-        cate = categoria.find('nombre').text
-        peliculas = categoria.find('peliculas')
-        for pelicula in peliculas.findall('pelicula'):
-            titulo = pelicula.find('titulo').text
-            director = pelicula.find('director').text
-            anio = pelicula.find('anio').text
-            fecha = pelicula.find('fecha').text
-            hora = pelicula.find('hora').text
-
-            nueva_pelicula = Pelicula(cate, titulo, director, anio, fecha, hora)
-            cartelera.agregar_pelicula(nueva_pelicula)
+        nueva_pelicula = Pelicula(cate, titulo, director, anio, fecha, hora)
+        cartelera.agregar_pelicula(nueva_pelicula)
     
-cargar_datos_cartelera()
 
 @cartelera_bp.route('/index', methods=['GET'])
 def index():
@@ -134,16 +99,12 @@ def index():
 # Ruta para mostrar la cartelera
 @cartelera_bp.route('/cartelera', methods=['GET'])
 def mostrar_cartelera():
-    #cargar_datos_cartelera()
     peliculas = cartelera.obtener_peliculas()
     return render_template('cartelera.html', peliculas=peliculas)
 # Ruta para mostrar la cartelera cliente
 @cartelera_bp.route('/carteleracl', methods=['GET'])
 def mostrar_carteleracl():
-    
     peliculas = cartelera.obtener_peliculas()
-
-    
     return render_template('carteleraCliente.html', peliculas=peliculas)
 
 @cartelera_bp.route('/agregar_pelicula', methods=['GET', 'POST'])
@@ -204,85 +165,9 @@ def eliminar_pelicula(nombre_pelicula):
         
         return "Película no encontrada"
 
-#comprar 
-@cartelera_bp.route('/comprar-boleto', methods=['POST'])
-def comprar_boleto():
-    categoria = request.form.get('categoria')
-    titulo = request.form.get('titulo')
-    num = 1
-
-    boleto = Boleto(categoria, titulo, num)
-    lista_boletos.append(boleto)  # Agregar la compra a la lista de compras
-
-    response_data = {
-        'mensaje': 'Compra exitosa',
-        'categoria': categoria,
-        'titulo': titulo
-    }
-
-    return jsonify(response_data)
+#modificacion 
 
 
-
-
-
-@cartelera_bp.route('/obtener_compras', methods=['GET'])
-def obtener_compras():
-    # Obtener la lista de compras realizadas desde tu estructura de datos
-    compras = lista_boletos.obtener_comprasb()
-
-    # Crear una lista de diccionarios con los datos de cada compra
-    lista_compras = []
-    for compra in compras:
-        datos_compra = {
-            'numero_boleto': compra.numero_boleto,
-            'categoria': compra.categoria,
-            'titulo': compra.titulo
-        }
-        lista_compras.append(datos_compra)
-
-    # Retornar los datos de las compras en formato JSON
-    return jsonify(lista_compras)
-
-#Favoritos
-@cartelera_bp.route('/lista_favorito', methods=['POST'])
-def lista_favorito():
-    categoria = request.form.get('categoria')
-    titulo = request.form.get('titulo')
-    num = 1
-
-    boleto = Favorito(categoria, titulo, num)
-    lista_favoritos.append(boleto)  # Agregar la compra a la lista de compras
-
-    response_data = {
-        'mensaje': 'Solicitud Exitosa',
-        'categoria': categoria,
-        'titulo': titulo
-    }
-
-    return jsonify(response_data)
-
-
-
-
-
-@cartelera_bp.route('/obtener_favorito', methods=['GET'])
-def obtener_favorito():
-    # Obtener la lista de compras realizadas desde tu estructura de datos
-    compras = ListaFavorito().obtener_favoritas()
-
-    # Crear una lista de diccionarios con los datos de cada compra
-    lista_favoritos = []
-    for favory in compras:
-        datos_fav = {
-            'numero_boleto': favory.numero_boleto,
-            'categoria': favory.categoria,
-            'titulo': favory.titulo
-        }
-        lista_favoritos.append(datos_fav)
-
-    # Retornar los datos de las compras en formato JSON
-    return jsonify(lista_favoritos)
 
 app.register_blueprint(cartelera_bp)
 

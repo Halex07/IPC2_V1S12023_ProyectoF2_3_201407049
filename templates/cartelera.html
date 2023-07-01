@@ -39,12 +39,9 @@
         </table>
 
         <div class="d-flex justify-content-between">
-            <a href="{{ url_for('cartelera.agregar_pelicula') }}" class="btn btn-success btn-block text-center">Agregar Película</a>
+            <a href="{{ url_for('cartelera.agregar_pelicula') }}" class="btn btn-success btn-block text-center">Agregar Pelicula</a>
             <form action="{{ url_for('cartelera.agregar_pelicula') }}" method="post" enctype="multipart/form-data">
-                <div class="form-group">
-                    <input type="file" name="xml_file" accept=".xml" class="form-control-file" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Cargar XML</button>
+                
             </form>
         </div>
     </div>

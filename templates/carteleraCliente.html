@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cartelera</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Cartelera</h1>
+
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Categoria</th>
+                    <th>Titulo</th>
+                    <th>Director</th>
+                    <th>Año</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pelicula in peliculas %}
+                <tr>
+                    <td>{{ pelicula.cate }}</td>
+                    <td>{{ pelicula.titulo }}</td>
+                    <td>{{ pelicula.director }}</td>
+                    <td>{{ pelicula.anio }}</td>
+                    <td>{{ pelicula.fecha }}</td>
+                    <td>{{ pelicula.hora }}</td>
+                    <td>
+                        <button onclick="comprarBoleto('{{ pelicula.cate }}', '{{ pelicula.titulo }}')">Comprar</button>
+                        <button onclick="AgregarFavoritos('{{ pelicula.cate }}', '{{ pelicula.titulo }}')">Favoritos</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <button onclick="verCompras()">Ver Compras</button>
+        <button onclick="verFavoritos()">Ver Favoritos</button>
+    </div>
+
+    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
+    <script>
+        function comprarBoleto(categoria, titulo) {
+            Swal.fire({
+                title: 'Comprar boleto',
+                text: '¿Deseas comprar el boleto para la película ' + titulo + '?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, comprar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "{{ url_for('cartelera.comprar_boleto') }}"; // Ajusta la URL para realizar la compra en tu backend
+                    var formData = new FormData();
+                    formData.append('categoria', categoria);
+                    formData.append('titulo', titulo);
+
+                    fetch(url, {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Error al realizar la compra');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        Swal.fire({
+                            title: '¡Compra exitosa!',
+                            text: 'Se ha realizado la compra del boleto para la película ' + titulo,
+                            icon: 'success'
+                        });
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Ocurrió un error al realizar la compra',
+                            icon: 'error'
+                        });
+                    });
+                }
+            });
+        }
+
+        function verCompras() {
+            // Realizar petición AJAX para obtener las compras realizadas
+            fetch("{{ url_for('cartelera.obtener_compras') }}")
+                .then(response => response.json())
+                .then(data => {
+                    // Construir el contenido de la ventana emergente con las compras
+                    let contenido = '<h2>Compras realizadas</h2>';
+                    if (data.length > 0) {
+                        contenido += '<ul>';
+                        data.forEach(compra => {
+                            contenido += '<li>Número de boleto: ' + compra.numero_boleto + '</li>';
+                            contenido += '<li>Categoría: ' + compra.categoria + '</li>';
+                            contenido += '<li>Título: ' + compra.titulo + '</li>';
+                            contenido += '<br>';
+                        });
+                        contenido += '</ul>';
+                    } else {
+                        contenido += '<p>No se han realizado compras</p>';
+                    }
+
+                    // Mostrar la ventana emergente con el contenido generado
+                    Swal.fire({
+                        title: 'Compras realizadas',
+                        html: contenido,
+                        icon: 'info'
+                    });
+                })
+                .catch(error => console.error(error));
+        }
+    </script>
+    <script>
+        function AgregarFavoritos(categoria, titulo) {
+            Swal.fire({
+                title: 'Agregar Favorito',
+                text: '¿Deseas agergar a favoritos la película ' + titulo + '?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, agregar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "{{ url_for('cartelera.lista_favorito') }}"; 
+                    var formData = new FormData();
+                    formData.append('categoria', categoria);
+                    formData.append('titulo', titulo);
+
+                    fetch(url, {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Error al realizar la solicitud');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        Swal.fire({
+                            title: '¡Solicitud exitosa!',
+                            text: 'Se a agregado a tu lista de favoritos ' + titulo,
+                            icon: 'success'
+                        });
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Ocurrió un error al realizar la solicitud',
+                            icon: 'error'
+                        });
+                    });
+                }
+            });
+        }
+
+        function verFavoritos() {
+            
+            fetch("{{ url_for('cartelera.obtener_favorito') }}")
+                .then(response => response.json())
+                .then(data => {
+                    // Construir el contenido de la ventana emergente con las favoritos
+                    let contenido = '<h2>Lista Favoritos</h2>';
+                    if (data.length > 0) {
+                        contenido += '<ul>';
+                        data.forEach(compra => {
+                            contenido += '<li>Número de boleto: ' + compra.numero_boleto + '</li>';
+                            contenido += '<li>Categoría: ' + compra.categoria + '</li>';
+                            contenido += '<li>Título: ' + compra.titulo + '</li>';
+                            contenido += '<br>';
+                        });
+                        contenido += '</ul>';
+                    } else {
+                        contenido += '<p>No se han realizado solicitud</p>';
+                    }
+
+                    // Mostrar la ventana emergente con el contenido generado
+                    Swal.fire({
+                        title: 'Lista Favoritos',
+                        html: contenido,
+                        icon: 'info'
+                    });
+                })
+                .catch(error => console.error(error));
+        }
+    </script>
+
+
+</body>
+</html>

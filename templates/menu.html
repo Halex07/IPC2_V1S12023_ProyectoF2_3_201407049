@@ -18,9 +18,9 @@
         {% elif session['rol'] == 'cliente' %}
             <h1 class="mt-4">Menú del cliente</h1>
             <ul class="list-group">
-                <a href="{{ url_for('cartelera.mostrar_cartelera') }}" class="list-group-item">Películas</a>
+                <a href="{{ url_for('cartelera.mostrar_carteleracl') }}" class="list-group-item">Películas</a>
                 <a href="/salas" class="list-group-item">Gestionar salas</a>
-                <a href="/comprar_boletos" class="list-group-item">Comprar boletos</a>
+                <a href="/b" class="list-group-item">Comprar boletos</a>
                 <a href="/gestionar_boletos" class="list-group-item">Gestionar boletos</a>
                 <a href="/logout" class="list-group-item">Salir</a>
             </ul>
