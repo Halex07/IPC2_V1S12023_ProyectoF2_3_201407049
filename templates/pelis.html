@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Películas</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.6.0/css/bootstrap.min.css">
+    <style>
+        .carousel-item {
+            text-align: center;
+        }
+        .carousel-image {
+            max-height: 300px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <h1>Películas</h1>
+
+    {% for categoria in data['categoria'] %}
+        <h2>{{ categoria['nombre'] }}</h2>
+        <div id="{{ categoria['nombre'] }}Carousel" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                {% set active = true %}
+                {% for pelicula in categoria['peliculas']['pelicula'] %}
+                    {% if active %}
+                        <div class="carousel-item active">
+                            {% set active = false %}
+                    {% else %}
+                        <div class="carousel-item">
+                    {% endif %}
+                            <div class="row justify-content-center">
+                                <div class="col-6">
+                                    <h3>{{ pelicula['titulo'] }}</h3>
+                                    <p>Director: {{ pelicula['director'] }}</p>
+                                    <p>Año: {{ pelicula['anio'] }}</p>
+                                    <p>Fecha: {{ pelicula['fecha'] }}</p>
+                                    <p>Hora: {{ pelicula['hora'] }}</p>
+                                    <img src="{{ pelicula['imagen'] }}" alt="{{ pelicula['titulo'] }}" class="img-fluid carousel-image">
+                                    <p>Precio: {{ pelicula['precio'] }}</p>
+                                </div>
+                            </div>
+                        </div>
+                {% endfor %}
+            </div>
+
+            <a class="carousel-control-prev" href="#{{ categoria['nombre'] }}Carousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Anterior</span>
+            </a>
+            <a class="carousel-control-next" href="#{{ categoria['nombre'] }}Carousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Siguiente</span>
+            </a>
+        </div>
+    {% endfor %}
+
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $('.carousel').carousel();
+        });
+    </script>
+</body>
+</html>
