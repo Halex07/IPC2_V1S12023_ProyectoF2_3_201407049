@@ -10,7 +10,7 @@
         <ul class="list-group">
             <a href="{{ url_for('usuarios.agregar_usuario') }}" class="list-group-item">Agregar usuario</a>
             <a href="/modificar_usuario" class="list-group-item">Modificar usuario</a>
-            <a href="/ver_lista_usuarios" class="list-group-item">Ver lista de usuarios</a>
+            <a href="{{ url_for('usuarios.listusers') }}" class="list-group-item">Ver lista de usuarios</a>
             <a href="/eliminar_usuario" class="list-group-item">Eliminar usuario</a>
             <a href="/logout" class="list-group-item">Salir</a>
         </ul>

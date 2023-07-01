@@ -92,12 +92,37 @@ def agregar_usuario():
 
     return render_template('agregar_usuario.html')
 
+def obtener_usuarios():
+    tree = etree.parse('usuarios.xml')
+    root = tree.getroot()
+
+    usuarios = ListaUsuarios()
+
+    for usuario_element in root.findall('usuario'):
+        rol = usuario_element.find('rol').text
+        nombre = usuario_element.find('nombre').text
+        apellido = usuario_element.find('apellido').text
+        telefono = usuario_element.find('telefono').text
+        correo = usuario_element.find('correo').text
+        contrasena = usuario_element.find('contrasena').text
+
+        usuario = Usuario(rol, nombre, apellido, telefono, correo, contrasena)
+        usuarios.append(usuario)
+
+    return usuarios
+
+
+@usuarios_blueprint.route('/listusers')
+def listusers():
+    usuarios = obtener_usuarios()
+    return render_template('ver_lista_usuarios.html', usuarios=usuarios)
 # Registrar el blueprint en la aplicación
 app.register_blueprint(usuarios_blueprint)
 
 # Ruta de inicio
 @app.route('/')
 def index():
+    
     return render_template('login.html')
 
 # Crear una instancia de la lista de usuarios

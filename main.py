@@ -68,7 +68,7 @@ def cargar_usuarios():
 
 
 
-app.secret_key = "tu_clave_secreta"  # Esta clave se utiliza para firmar las cookies de sesión
+app.secret_key = "tu_clave_secreta" 
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -84,7 +84,8 @@ def login():
                 session['rol'] = usuario['rol']
                 return redirect(url_for('menu'))
             nodo_actual = nodo_actual.siguiente
-        return 'Credenciales inválidas'
+        error_message = 'Credenciales inválidas'
+        return render_template('login.html', error_message=error_message)
     return render_template('login.html')
 
 
@@ -104,7 +105,7 @@ def logout():
     return redirect(url_for('login'))
 
 
-# Define las otras rutas y funciones asociadas para gestionar películas, salas, boletos, etc.
+
 
 if __name__ == '__main__':
     app.run(debug=True)
